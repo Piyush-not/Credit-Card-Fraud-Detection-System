@@ -1,0 +1,8 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.vscode/
+data/creditcard.csv
+outputs/scored.csv
+fraud_detection_project/outputs/scored.csv
