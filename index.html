@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Case File — Credit Card Fraud Detection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #150a20;
+    --bg-alt: #1c0f2b;
+    --surface: #23132f;
+    --surface-2: #2a1638;
+    --line: #402654;
+    --line-soft: #2f1c40;
+    --text: #f3e9fb;
+    --text-dim: #b79cd6;
+    --text-faint: #8a72a8;
+    --pink: #ff5ea8;
+    --pink-dim: #b83d78;
+    --purple: #9b5cff;
+    --purple-2: #6d2bd9;
+    --amber: #ffb454;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(155, 92, 255, 0.18), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(255, 94, 168, 0.10), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--display);
+    line-height: 1.55;
+  }
+
+  a { color: var(--pink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- Header / hero ---------- */
+
+  header.hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pink);
+    border: 1px solid var(--pink-dim);
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: rgba(255, 94, 168, 0.06);
+  }
+
+  .stamp::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pink);
+    box-shadow: 0 0 8px var(--pink);
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    margin: 22px 0 18px;
+    font-weight: 700;
+    background: linear-gradient(120deg, #ffffff 10%, #e7c9ff 55%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    max-width: 16ch;
+  }
+
+  .lede {
+    color: var(--text-dim);
+    max-width: 62ch;
+    font-size: 1.03rem;
+  }
+
+  .hero-links {
+    margin-top: 26px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    color: var(--text);
+    transition: border-color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .btn:hover { text-decoration: none; border-color: var(--purple); background: var(--surface-2); transform: translateY(-1px); }
+
+  .btn.primary {
+    background: linear-gradient(120deg, var(--purple-2), var(--pink-dim));
+    border-color: transparent;
+    color: #fff;
+  }
+  .btn.primary:hover { filter: brightness(1.1); }
+
+  /* ---------- Section scaffolding ---------- */
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--line-soft); }
+  section:last-of-type { border-bottom: none; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 10px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 0 0 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ---------- Overview stat grid ---------- */
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 20px 16px;
+    text-align: left;
+  }
+
+  .stat .num {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--pink);
+    display: block;
+  }
+
+  .stat .label {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 640px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- Table ---------- */
+
+  .table-caption {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: 8px; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 13px;
+    min-width: 560px;
+  }
+
+  th, td { padding: 10px 14px; text-align: left; white-space: nowrap; }
+
+  thead th {
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-weight: 500;
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody tr:nth-child(odd) { background: rgba(255,255,255,0.015); }
+  tbody tr:hover { background: rgba(255, 94, 168, 0.06); }
+
+  td.legit { color: var(--text-dim); }
+
+  /* ---------- Model comparison cards ---------- */
+
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 640px) { .model-grid { grid-template-columns: 1fr; } }
+
+  .model-card {
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  .model-card.selected {
+    border-color: var(--pink-dim);
+    background: linear-gradient(160deg, rgba(255,94,168,0.08), var(--surface) 60%);
+  }
+
+  .model-card h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1b0d24;
+    background: var(--amber);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  .model-card dl {
+    margin: 16px 0 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .model-card dt { color: var(--text-faint); }
+  .model-card dd { margin: 0; text-align: right; color: var(--text); }
+  .model-card.selected dd.highlight { color: var(--pink); font-weight: 600; }
+
+  /* ---------- Results prose ---------- */
+
+  .prose { color: var(--text-dim); max-width: 68ch; }
+  .prose strong { color: var(--text); }
+
+  figure { margin: 26px 0 0; }
+  .figure-frame {
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    background: var(--surface);
+    aspect-ratio: 16 / 7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  figcaption {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 8px;
+  }
+
+  /* ---------- Source ---------- */
+
+  .source-card {
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .source-card code {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--purple);
+    margin: 6px 0 8px;
+  }
+
+  .source-card p { margin: 0; color: var(--text-dim); font-size: 14px; max-width: 44ch; }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    padding: 32px 0 60px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  footer .dot { color: var(--pink); }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header class="hero">
+      <span class="stamp">Case File · Machine Learning Project</span>
+      <h1>Credit Card Fraud Detection</h1>
+      <p class="lede">
+        A classifier trained to catch fraudulent transactions inside a highly imbalanced
+        dataset — 284,807 real, anonymized transactions, only 492 of them fraudulent.
+        Built end-to-end: data prep, class-imbalance handling, model comparison, and a
+        live scoring tool.
+      </p>
+      <div class="hero-links">
+        <a class="btn primary" href="https://github.com/Piyush-not/Credit-Card-Fraud-Detection-System">View code on GitHub →</a>
+        <a class="btn" href="https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud">Dataset source ↗</a>
+      </div>
+    </header>
+
+    <section id="overview">
+      <p class="eyebrow">01 — Overview</p>
+      <div class="stat-grid">
+        <div class="stat"><span class="num">284,807</span><span class="label">Transactions</span></div>
+        <div class="stat"><span class="num">492</span><span class="label">Confirmed fraud</span></div>
+        <div class="stat"><span class="num">0.173%</span><span class="label">Fraud rate</span></div>
+        <div class="stat"><span class="num">30</span><span class="label">Features</span></div>
+        <div class="stat"><span class="num">2</span><span class="label">Models trained</span></div>
+      </div>
+    </section>
+
+    <section id="input-format">
+      <p class="eyebrow">02 — Input Format</p>
+      <h2>What the model sees</h2>
+      <p class="prose">
+        Each row is a single transaction. <code>V1</code>–<code>V28</code> are
+        PCA-anonymized features (the original details are confidential);
+        <code>Time</code> and <code>Amount</code> are the only two raw values retained.
+        <code>Class</code> is the ground-truth label: 1 for fraud, 0 for legitimate.
+      </p>
+      <p class="table-caption">Time · V1–V28 · Amount · Class</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Time</th><th>V1</th><th>V2</th><th>V3</th><th>V4</th><th>Amount</th><th>Class</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>61401.0</td><td>-0.988</td><td>1.507</td><td>0.804</td><td>0.082</td><td>$49.99</td><td class="legit">legit</td></tr>
+            <tr><td>37861.0</td><td>-1.241</td><td>1.508</td><td>0.230</td><td>-0.449</td><td>$10.71</td><td class="legit">legit</td></tr>
+            <tr><td>95074.0</td><td>-1.328</td><td>1.544</td><td>3.007</td><td>4.242</td><td>$22.70</td><td class="legit">legit</td></tr>
+            <tr><td>76607.0</td><td>1.164</td><td>0.212</td><td>0.540</td><td>1.316</td><td>$6.90</td><td class="legit">legit</td></tr>
+            <tr><td>57228.0</td><td>1.327</td><td>-0.366</td><td>0.757</td><td>0.260</td><td>$23.74</td><td class="legit">legit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="approach">
+      <p class="eyebrow">03 — Approach</p>
+      <h2>Two models, head to head</h2>
+      <p class="prose" style="margin-bottom: 24px;">
+        A 70/30 stratified split kept the same fraud rate in both sets.
+        <code>Time</code> and <code>Amount</code> were standardized; the PCA columns
+        were already scaled. Both models used class-weighting rather than naive
+        oversampling, so the training itself compensates for the imbalance instead
+        of duplicating rare fraud rows.
+      </p>
+      <div class="model-grid">
+        <div class="model-card">
+          <h3>Logistic Regression</h3>
+          <dl>
+            <dt>ROC-AUC</dt><dd>0.968</dd>
+            <dt>PR-AUC</dt><dd>0.700</dd>
+            <dt>Precision (fraud)</dt><dd>6.7%</dd>
+            <dt>Recall (fraud)</dt><dd>87.8%</dd>
+            <dt>False positives</dt><dd>1,806</dd>
+          </dl>
+        </div>
+        <div class="model-card selected">
+          <h3>Random Forest <span class="badge">Selected</span></h3>
+          <dl>
+            <dt>ROC-AUC</dt><dd class="highlight">0.970</dd>
+            <dt>PR-AUC</dt><dd class="highlight">0.792</dd>
+            <dt>Precision (fraud)</dt><dd class="highlight">86.1%</dd>
+            <dt>Recall (fraud)</dt><dd>75.0%</dd>
+            <dt>False positives</dt><dd class="highlight">18</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <p class="eyebrow">04 — Results</p>
+      <h2>Why Random Forest wins</h2>
+      <p class="prose">
+        Random Forest is the practical choice: logistic regression catches slightly
+        more fraud but at the cost of <strong>1,806 false alarms</strong> on legitimate
+        transactions — unusable for a real system. Random Forest catches
+        <strong>111 of 148</strong> frauds in the test set while flagging only
+        <strong>18</strong> legitimate transactions.
+      </p>
+      <figure>
+        <div class="figure-frame">precision-recall &amp; roc curves</div>
+        <figcaption>Fig. 1 — Precision-Recall and ROC curves, both models, held-out test set.</figcaption>
+      </figure>
+      <figure>
+        <div class="figure-frame">top feature importances</div>
+        <figcaption>Fig. 2 — Top 12 predictive features (Random Forest importance). V14, V4, and V10 dominate.</figcaption>
+      </figure>
+    </section>
+
+    <section id="source">
+      <p class="eyebrow">05 — Source</p>
+      <div class="source-card">
+        <div>
+          <h2 style="margin-bottom: 6px;">Full Code + Dataset</h2>
+          <code>github.com/Piyush-not/Credit-Card-Fraud-Detection-System</code>
+          <p>Training script, evaluation, saved models, and the Flask web app used to score new files.</p>
+        </div>
+        <a class="btn primary" href="https://github.com/Piyush-not/Credit-Card-Fraud-Detection-System">Open repository →</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>Random Forest · class-weighted · scikit-learn</span>
+      <span><span class="dot">●</span> Dataset: Kaggle — Credit Card Fraud Detection (ULB Machine Learning Group)</span>
+    </footer>
+  </div>
+
+</body>
+</html>
