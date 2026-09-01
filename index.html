@@ -2103,6 +2103,14 @@
             .visual {
                 height: 240px;
             }
+            .visual {
+    height: 240px;
+    margin-bottom: 30px;
+}
+
+section {
+    padding-top: 50px;
+}
 
             .shield {
                 width: 95px;
@@ -2694,13 +2702,12 @@
     </div>
 
     <p class="section-description">
-
-        Submit a transaction to the trained Random Forest
-        model. The system returns the fraud probability,
-        risk level and classification using your selected
-        detection threshold.
-
-    </p>
+    Analyze a transaction using FraudGuard's trained Random Forest
+    model. Start with a real dataset example, or use Advanced
+    Analysis when you have the complete transaction features.
+    The system returns a fraud probability, risk level and
+    classification using your selected detection threshold.
+</p>
 
 
     <div class="scanner">
@@ -2716,10 +2723,9 @@
 
             <p class="panel-description">
 
-    Enter the transaction amount and time, then run
-    the AI-powered fraud analysis. Not sure what the
-    fields mean? Click the <strong style="color:var(--orange)">?</strong>
-    button for a quick guide.
+    New to fraud detection? Start with a real transaction
+    from the dataset below. For custom predictions, use
+    Advanced Analysis and provide the complete feature set.
 
 </p>
 
@@ -2764,21 +2770,24 @@
         </div>
 
     </div>
+    <div class="input-help" style="margin-top:12px;">
+    Quick Demo loads the complete transaction automatically.
+    Amount and Time alone are not sufficient for the full
+    Random Forest model.
+</div>
 
 </div>
 <div class="demo-section">
 
     <div class="demo-heading">
+    <span>
+        Quick Demo Analysis
+    </span>
 
-        <span>
-            New here?
-        </span>
-
-        <span class="demo-heading-muted">
-            Try a real example from the dataset
-        </span>
-
-    </div>
+    <span class="demo-heading-muted">
+        Use a real transaction from the dataset
+    </span>
+</div>
 
 
     <div class="demo-buttons">
@@ -2816,14 +2825,17 @@
 
 
             <!-- ADVANCED FEATURES -->
-             <div class="privacy-notice">
-    <span class="privacy-icon">🔒</span>
+<div class="privacy-notice">
+    <span class="privacy-icon">ℹ️</span>
     <div>
-        <strong>Privacy & Feature Anonymization</strong>
+        <strong>About the Transaction Features</strong>
         <p>
-            V1–V28 are anonymized/transformed features from the
-            underlying dataset. Their original meaning is not
-            exposed in this interface.
+            The trained model requires 30 input features:
+            Time, V1–V28 and Amount. V1–V28 are anonymized
+            PCA-transformed features from the dataset and
+            do not represent directly understandable fields
+            such as card number, merchant, location or
+            customer information.
         </p>
     </div>
 </div>
@@ -2835,7 +2847,7 @@
             >
 
                 <span>
-                    Advanced Features · V1–V28
+                    Advanced Analysis · Full Feature Input
                 </span>
 
                 <span id="advancedIcon">
@@ -2846,16 +2858,77 @@
 
 
             <div
-                class="advanced"
-                id="advancedFeatures"
-            >
+    class="advanced"
+    id="advancedFeatures"
+>
 
-                <div
-                    class="feature-grid"
-                    id="featureGrid"
-                ></div>
+    <div class="advanced-instructions">
 
+        <strong>
+            Advanced Analysis Instructions
+        </strong>
+
+        <p>
+            This model was trained using the Kaggle Credit Card
+            Fraud Detection dataset. A complete prediction requires
+            all 30 input features:
+            <strong>Time, V1–V28 and Amount.</strong>
+        </p>
+
+        <p>
+            V1–V28 are anonymized PCA-transformed features.
+            They do not correspond directly to fields such as
+            card number, merchant, location or customer information.
+        </p>
+
+        <p>
+            If you have a transaction from the original dataset,
+            enter the feature values exactly as provided.
+            Do not invent or estimate V1–V28 values.
+        </p>
+
+        <div class="advanced-example">
+
+            <strong>Example:</strong>
+
+            <div>
+                Time = 406.0
             </div>
+
+            <div>
+                V1 = -2.312
+            </div>
+
+            <div>
+                V2 = 1.951
+            </div>
+
+            <div>
+                V3 = -1.609
+            </div>
+
+            <div>
+                ...
+            </div>
+
+            <div>
+                V28 = 0.102
+            </div>
+
+            <div>
+                Amount = 149.62
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        class="feature-grid"
+        id="featureGrid"
+    ></div>
+
+</div>
 
 
             <!-- THRESHOLD -->
@@ -3031,12 +3104,32 @@
         </h3>
 
         <p>
+    Upload a transaction dataset to analyze multiple
+    transactions using the same trained Random Forest
+    pipeline used for individual predictions.
+</p>
 
-            Upload a transaction dataset and score multiple
-            transactions at once. Batch prediction will use
-            the same trained Random Forest pipeline.
+<div class="dataset-info">
 
-        </p>
+    <strong>
+        Required CSV format
+    </strong>
+
+    <p>
+        Your CSV should contain the following model features:
+    </p>
+
+    <code>
+        Time, V1, V2, V3, ... V28, Amount
+    </code>
+
+    <p>
+        A <strong>Class</strong> column may also be included
+        when evaluating transactions that already have known
+        fraud labels.
+    </p>
+
+</div>
 
         <label class="file-button">
 
@@ -4203,8 +4296,8 @@ async function loadDemoTransaction(type) {
 
         if (status) {
             status.textContent =
-                `Complete ${label} transaction loaded. ` +
-                `Time, Amount and V1–V28 are populated.`;
+    `Complete ${label} transaction loaded. ` +
+    `All 30 model features are populated.`;
         }
 
         // -----------------------------
@@ -4284,9 +4377,9 @@ async function loadDemoTransaction(type) {
             advanced section and provide actual values.
         */
 
-        input.value = "0";
+        input.value = "";
 
-        featureGrid.appendChild(input);
+featureGrid.appendChild(input);
 
     }
 
@@ -4521,10 +4614,15 @@ async function loadDemoTransaction(type) {
                     parseFloat(input.value);
 
 
-                transaction[`V${i}`] =
-                    Number.isNaN(value)
-                        ? 0
-                        : value;
+                if (Number.isNaN(value)) {
+
+    throw new Error(
+        `Please enter a value for V${i}, or use a Quick Demo transaction.`
+    );
+
+}
+
+transaction[`V${i}`] = value;
 
             }
 
