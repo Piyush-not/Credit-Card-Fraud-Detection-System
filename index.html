@@ -1226,6 +1226,111 @@
 
             padding: 27px;
         }
+        /* =========================
+   MODEL INFORMATION
+========================= */
+
+.model-about {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+.model-about-label {
+    color: var(--orange);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.model-about p {
+    color: #777;
+    font-size: 11px;
+    line-height: 1.7;
+    margin: 0 0 12px;
+}
+
+.model-resource {
+    display: inline-block;
+    color: var(--orange);
+    font-size: 10px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.model-resource:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   DATASET INFORMATION
+========================= */
+
+.dataset-info {
+    margin-top: 15px;
+    padding: 24px;
+    background: #0c0c0c;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+}
+
+.dataset-info-label {
+    color: var(--orange);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.dataset-info h3 {
+    font-family: "Space Grotesk";
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.dataset-info p {
+    color: #777;
+    font-size: 11px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.dataset-stats {
+    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.dataset-stat {
+    padding: 14px;
+    background: #111;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.dataset-stat strong {
+    display: block;
+    font-family: "Space Grotesk";
+    font-size: 18px;
+    color: #eee;
+    margin-bottom: 4px;
+}
+
+.dataset-stat span {
+    color: #666;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.dataset-source {
+    margin-top: 16px !important;
+    font-size: 10px !important;
+}
 
         .model-header {
             display: flex;
@@ -2952,7 +3057,54 @@
         </p>
 
     </div>
+<div class="dataset-info">
 
+    <div class="dataset-info-label">
+        Training Dataset
+    </div>
+
+    <h3>
+        Credit Card Fraud Detection Dataset
+    </h3>
+
+    <p>
+        FraudGuard uses the well-known Kaggle Credit Card Fraud
+        Detection dataset. It contains anonymized credit card
+        transactions and is highly imbalanced, meaning genuine
+        transactions greatly outnumber fraudulent ones.
+    </p>
+
+    <div class="dataset-stats">
+
+        <div class="dataset-stat">
+            <strong>284,807</strong>
+            <span>Transactions</span>
+        </div>
+
+        <div class="dataset-stat">
+            <strong>492</strong>
+            <span>Fraud Cases</span>
+        </div>
+
+        <div class="dataset-stat">
+            <strong>0.173%</strong>
+            <span>Fraud Rate</span>
+        </div>
+
+    </div>
+
+    <p class="dataset-source">
+    Source: Kaggle · Credit Card Fraud Detection ·
+    <a
+        href="https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud"
+        target="_blank"
+        rel="noopener"
+    >
+        View dataset →
+    </a>
+</p>
+
+</div>
 </section>
 
 
@@ -3136,6 +3288,31 @@
                 </div>
 
             </div>
+            <div class="model-about">
+
+    <div class="model-about-label">
+        About this model
+    </div>
+
+    <p>
+        Random Forest combines multiple decision trees to make
+        a stronger classification. Each tree learns from a
+        different sample of the data and considers a random
+        subset of features. For fraud detection, this helps
+        capture complex relationships between transaction
+        features and fraud risk.
+    </p>
+
+    <a
+        class="model-resource"
+        href="https://scikit-learn.org/stable/modules/ensemble.html"
+        target="_blank"
+        rel="noopener"
+    >
+        Read more: Scikit-learn Random Forest →
+    </a>
+
+</div>
 
         </div>
 
@@ -3302,6 +3479,30 @@
                 </div>
 
             </div>
+            <div class="model-about">
+
+    <div class="model-about-label">
+        About this model
+    </div>
+
+    <p>
+        Logistic Regression is a linear classification model
+        that estimates the probability of a transaction belonging
+        to the fraud class. It provides a simple and interpretable
+        baseline, making it useful for comparing how much the
+        more flexible Random Forest improves fraud detection.
+    </p>
+
+    <a
+        class="model-resource"
+        href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"
+        target="_blank"
+        rel="noopener"
+    >
+        Read more: Scikit-learn Logistic Regression →
+    </a>
+
+</div>
 
         </div>
 
