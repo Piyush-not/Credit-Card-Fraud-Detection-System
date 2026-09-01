@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" type="image/png" href="assets/fraudguard-favicon.png">
 
     <meta charset="UTF-8">
 
@@ -283,14 +284,26 @@
         }
 
         .logo {
-            font-family: "Space Grotesk";
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-            font-size: 22px;
+    font-family: "Space Grotesk";
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
 
-            font-weight: 700;
+.logo img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 8px;
+}
 
-            letter-spacing: -1px;
-        }
+.logo span {
+    color: #ffffff;
+}
 
         .logo span {
             color: var(--orange);
@@ -2382,8 +2395,9 @@
 <nav>
 
     <div class="logo">
-        Fraud<span>Guard</span>
-    </div>
+    <img src="assets/fraudguard-logo.png" alt="FraudGuard Logo">
+    <span>FraudGuard</span>
+</div>
 
     <div class="nav-links">
 
