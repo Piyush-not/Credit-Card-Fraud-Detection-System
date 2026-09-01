@@ -537,57 +537,75 @@
         }
 
         .shield {
-            position: absolute;
+    position: absolute;
+    width: 145px;
+    height: 165px;
+    right: 15%;
+    top: 50%;
+    transform: translateY(-50%);
 
-            width: 145px;
+    clip-path: polygon(
+        50% 0%,
+        92% 15%,
+        85% 65%,
+        50% 100%,
+        15% 65%,
+        8% 15%
+    );
 
-            height: 165px;
+    background:
+        linear-gradient(
+            145deg,
+            #ffd08a 0%,
+            #ff8a32 35%,
+            #ff5200 75%,
+            #d93600 100%
+        );
 
-            right: 15%;
+    box-shadow:
+        0 0 45px rgba(255, 90, 0, 0.35),
+        inset 0 0 25px rgba(255, 255, 255, 0.15);
 
-            top: 50%;
+    overflow: hidden;
+}
 
-            transform: translateY(-50%);
+/* Glass highlight */
+.shield::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 35%;
+    height: 100%;
 
-            clip-path:
-                polygon(
-                    50% 0%,
-                    92% 15%,
-                    85% 65%,
-                    50% 100%,
-                    15% 65%,
-                    8% 15%
-                );
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.32),
+        rgba(255,255,255,0.03)
+    );
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffc16c,
-                    #ff5200
-                );
+    transform: skewX(-12deg);
+}
 
-            box-shadow:
-                0 0 80px
-                rgba(255,90,0,0.5);
-        }
+/* Clean check mark */
+.shield::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
 
-        .shield::after {
-            content: "✓";
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            position: absolute;
+    font-family: Arial, sans-serif;
+    font-size: 62px;
+    font-weight: 700;
 
-            inset: 0;
+    color: white;
 
-            display: grid;
-
-            place-items: center;
-
-            font-size: 60px;
-
-            font-weight: 700;
-
-            color: white;
-        }
+    text-shadow:
+        0 2px 8px rgba(0,0,0,0.12);
+}
 
 
         /* =========================
@@ -3904,7 +3922,7 @@
 <footer>
 
     <div>
-        FraudGuard · Credit Card Fraud Detection
+        © 2026 FraudGuard · Credit Card Fraud Detection
     </div>
 
     <div>
